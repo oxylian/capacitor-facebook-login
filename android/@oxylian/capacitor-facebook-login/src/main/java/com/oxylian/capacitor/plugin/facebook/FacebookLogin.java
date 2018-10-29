@@ -29,8 +29,12 @@ public class FacebookLogin extends Plugin {
     public static final int FACEBOOK_SDK_REQUEST_CODE_OFFSET = 0xface;
 
     private String dateToJson(Date date) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
-
+        SimpleDateFormat simpleDateFormat;
+        try {
+            simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+        } catch (Exception e) {
+            simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ");
+        }
         return simpleDateFormat.format(date);
     }
 
