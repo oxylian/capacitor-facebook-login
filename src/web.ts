@@ -1,4 +1,5 @@
-import { WebPlugin } from '@capacitor/core';
+import { WebPlugin, registerWebPlugin } from '@capacitor/core';
+
 import { FacebookLoginPlugin, FacebookLoginResponse, FacebookCurrentAccessTokenResponse } from './definitions';
 
 interface FacebookGetLoginStatusResponse {
@@ -46,17 +47,34 @@ export class FacebookLoginWeb extends WebPlugin implements FacebookLoginPlugin {
   async login(options: { permissions: string[] }): Promise<FacebookLoginResponse> {
     console.log('FacebookLoginWeb.login', options);
 
-    return new Promise<FacebookLoginResponse>((resolve, reject) => {
-      FB.login((response) => {
+    return new Promise<FacebookLoginResponse>((resolve, _reject) => {
+      FB.login((response: FacebookGetLoginStatusResponse) => {
         console.debug('FB.login', response);
 
-        resolve(response);
+        if (response.status === 'connected') {
+          resolve({
+            accessToken: {
+              token: response.authResponse.accessToken,
+              applicationId: null,
+              declinedPermissions: [],
+              expires: null,
+              isExpired: null,
+              lastRefresh: null,
+              permissions: [],
+              userId: response.authResponse.userID
+            },
+            recentlyDeniedPermissions: [],
+            recentlyGrantedPermissions: []
+          });
+        } else {
+          resolve(null);
+        }
       }, { scope: options.permissions.join(',') });  
     });
   }
 
   async logout(): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
+    return new Promise<void>((resolve, _reject) => {
       FB.logout((response) => {
         console.debug('FB.logout', response);
 
@@ -66,7 +84,7 @@ export class FacebookLoginWeb extends WebPlugin implements FacebookLoginPlugin {
   }
 
   async getCurrentAccessToken(): Promise<FacebookCurrentAccessTokenResponse> {
-    return new Promise<FacebookCurrentAccessTokenResponse>((resolve, reject) => {
+    return new Promise<FacebookCurrentAccessTokenResponse>((resolve, _reject) => {
       FB.getLoginStatus((response) => {
         console.debug('FB.getLoginStatus', response);
 
@@ -90,5 +108,7 @@ export class FacebookLoginWeb extends WebPlugin implements FacebookLoginPlugin {
 }
 
 const FacebookLogin = new FacebookLoginWeb();
+
+registerWebPlugin(FacebookLogin);
 
 export { FacebookLogin };

@@ -6,7 +6,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { WebPlugin } from '@capacitor/core';
+import { WebPlugin, registerWebPlugin } from '@capacitor/core';
 ;
 export class FacebookLoginWeb extends WebPlugin {
     constructor() {
@@ -18,17 +18,35 @@ export class FacebookLoginWeb extends WebPlugin {
     login(options) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('FacebookLoginWeb.login', options);
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve, _reject) => {
                 FB.login((response) => {
                     console.debug('FB.login', response);
-                    resolve(response);
+                    if (response.status === 'connected') {
+                        resolve({
+                            accessToken: {
+                                token: response.authResponse.accessToken,
+                                applicationId: null,
+                                declinedPermissions: [],
+                                expires: null,
+                                isExpired: null,
+                                lastRefresh: null,
+                                permissions: [],
+                                userId: response.authResponse.userID
+                            },
+                            recentlyDeniedPermissions: [],
+                            recentlyGrantedPermissions: []
+                        });
+                    }
+                    else {
+                        resolve(null);
+                    }
                 }, { scope: options.permissions.join(',') });
             });
         });
     }
     logout() {
         return __awaiter(this, void 0, void 0, function* () {
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve, _reject) => {
                 FB.logout((response) => {
                     console.debug('FB.logout', response);
                     resolve();
@@ -38,7 +56,7 @@ export class FacebookLoginWeb extends WebPlugin {
     }
     getCurrentAccessToken() {
         return __awaiter(this, void 0, void 0, function* () {
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve, _reject) => {
                 FB.getLoginStatus((response) => {
                     console.debug('FB.getLoginStatus', response);
                     const result = {
@@ -60,5 +78,6 @@ export class FacebookLoginWeb extends WebPlugin {
     }
 }
 const FacebookLogin = new FacebookLoginWeb();
+registerWebPlugin(FacebookLogin);
 export { FacebookLogin };
 //# sourceMappingURL=web.js.map

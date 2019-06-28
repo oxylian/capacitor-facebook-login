@@ -1,12 +1,10 @@
-# Uncomment the next line to define a global platform for your project
-platform :ios, '10.0'
+platform :ios, '11.0'
 
 target 'Plugin' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
 
-  # Pods for IonicRunner
-  pod 'Capacitor'
+  pod 'Capacitor', :path => '../node_modules/@capacitor/ios'
 
   pod 'FacebookCore'
   pod 'FacebookLogin'
@@ -15,5 +13,5 @@ end
 target 'PluginTests' do
   use_frameworks!
 
-  pod 'Capacitor'
+  pod 'Capacitor', :path => '../node_modules/@capacitor/ios'
 end
