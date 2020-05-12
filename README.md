@@ -23,7 +23,8 @@ In file `AndroidManifest.xml`, add the following XML elements in `//manifest/app
 
 ```xml
 <meta-data android:name="com.facebook.sdk.ApplicationId"
-    android:value="@string/facebook_app_id"/>
+    android:value="@string/facebook_app_id"
+    tools:replace="android:value"/>
 
 <activity
     android:name="com.facebook.FacebookActivity"
@@ -47,6 +48,7 @@ In file `res/values/strings.xml` add the following lines :
 ```
 <string name="facebook_app_id">[APP_ID]</string>
 <string name="fb_login_protocol_scheme">fb[APP_ID]</string>
+<string name="fb_app_name">[APP_NAME]</string>
 ```
 
 Don't forget to replace `[APP_ID]` by your Facebook application Id.
