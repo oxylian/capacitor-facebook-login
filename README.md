@@ -1,6 +1,10 @@
 # capacitor-facebook-login
 Facebook Login plugin for Capacitor
 
+## NO LONGER MAINTAINED
+
+This project is no longer maintained as I no longer use Capacitor.
+
 ## Installation
 
 ```bash
